@@ -14,12 +14,15 @@ interface StoicQuote {
   theme: string;
 }
 
-type ActiveSection = 'home' | 'author' | 'glossary' | 'exercises';
+type ActiveSection = 'home' | 'author' | 'glossary' | 'exercises' | 'virtues';
 
 const authorNames: Record<string, string> = {
   marco_aurelio: 'Marco Aurelio',
   epicteto: 'Epicteto',
   seneca: 'Séneca',
+  musonio_rufo: 'Musonio Rufo',
+  crisipo: 'Crisipo de Solos',
+  zenon: 'Zenón de Citio',
 };
 
 const authorInfo: Record<string, { years: string; desc: string; works: string }> = {
@@ -37,6 +40,21 @@ const authorInfo: Record<string, { years: string; desc: string; works: string }>
     years: '4 a.C.–65 d.C.',
     desc: 'Filósofo, estadista y tutor de Nerón. Sus cartas y ensayos son guías prácticas para la vida virtuosa.',
     works: 'Cartas a Lucilio, Sobre la brevedad de la vida, Sobre la tranquilidad del alma',
+  },
+  musonio_rufo: {
+    years: '30–100 d.C.',
+    desc: 'Conocido como el "Sócrates romano". Maestro de Epicteto, defendió la igualdad educativa entre hombres y mujeres.',
+    works: 'Discursos (fragmentos conservados)',
+  },
+  crisipo: {
+    years: '279–206 a.C.',
+    desc: 'Gran sistematizador del estoicismo. Escribió más de 700 obras y consolidó la lógica y la ética estoica.',
+    works: 'Fragmentos conservados',
+  },
+  zenon: {
+    years: '334–262 a.C.',
+    desc: 'Fundador del estoicismo. Enseñó en la Stoa Poikilé (Pórtico Pintado) de Atenas, de donde toma nombre la escuela.',
+    works: 'Fragmentos conservados',
   },
 };
 
@@ -259,6 +277,79 @@ export default function PhilosophyScreen() {
     );
   }
 
+  if (section === 'virtues') {
+    const virtues = [
+      {
+        name: 'Sabiduría',
+        greek: 'Sophia / Prudentia',
+        desc: 'La capacidad de discernir el bien del mal, lo verdadero de lo falso. Es la virtud directriz que guía a todas las demás.',
+        practice: 'Ante cada decisión, pregúntate: ¿esto contribuye al bien? ¿Es conforme a la razón?',
+      },
+      {
+        name: 'Justicia',
+        greek: 'Dikaiosyne / Iustitia',
+        desc: 'Dar a cada uno lo que le corresponde. Incluye la bondad, la equidad y el servicio a la comunidad.',
+        practice: 'Trata a cada persona con dignidad. No tomes más de lo que mereces ni des menos de lo que debes.',
+      },
+      {
+        name: 'Fortaleza',
+        greek: 'Andreia / Fortitudo',
+        desc: 'La resistencia ante el dolor, el miedo y la adversidad. No es ausencia de temor, sino actuar correctamente a pesar de él.',
+        practice: 'Cuando sientas miedo o incomodidad, pregúntate si la acción correcta requiere que persistas.',
+      },
+      {
+        name: 'Templanza',
+        greek: 'Sophrosyne / Temperantia',
+        desc: 'La moderación de los deseos y las pasiones. El equilibrio entre el exceso y la carencia.',
+        practice: 'Observa tus impulsos antes de actuar. ¿Es necesario? ¿Es moderado? ¿Sirve a la virtud?',
+      },
+    ];
+
+    return (
+      <ScrollView style={{ flex: 1, backgroundColor: colors.cream }}>
+        <TouchableOpacity
+          onPress={() => setSection('home')}
+          style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.primary} />
+          <Text style={{ marginLeft: 8, color: colors.primary, fontWeight: '600' }}>Volver</Text>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 22, fontWeight: '700', color: colors.primary, paddingHorizontal: 20, marginBottom: 4 }}>
+          Las Cuatro Virtudes Cardinales
+        </Text>
+        <Text style={{ fontSize: 14, color: colors.textSoft, paddingHorizontal: 20, marginBottom: 20 }}>
+          Pilares de la ética estoica
+        </Text>
+        {virtues.map((v, idx) => (
+          <View
+            key={idx}
+            style={{
+              marginHorizontal: 16, marginBottom: 16, backgroundColor: '#FFF',
+              borderRadius: 16, padding: 20, borderLeftWidth: 4, borderLeftColor: colors.secondary,
+            }}
+          >
+            <Text style={{ fontSize: 20, fontWeight: '700', color: colors.primary }}>{v.name}</Text>
+            <Text style={{ fontSize: 13, fontStyle: 'italic', color: colors.secondary, marginTop: 2 }}>
+              {v.greek}
+            </Text>
+            <Text style={{ fontSize: 15, lineHeight: 24, color: colors.textMain, marginTop: 12 }}>
+              {v.desc}
+            </Text>
+            <View style={{ marginTop: 12, backgroundColor: '#F0E6D3', borderRadius: 10, padding: 12 }}>
+              <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary, marginBottom: 4 }}>
+                PRÁCTICA DIARIA
+              </Text>
+              <Text style={{ fontSize: 14, lineHeight: 20, color: colors.textMain, fontStyle: 'italic' }}>
+                {v.practice}
+              </Text>
+            </View>
+          </View>
+        ))}
+        <View style={{ height: 30 }} />
+      </ScrollView>
+    );
+  }
+
   // Home section
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colors.cream }}>
@@ -351,7 +442,7 @@ export default function PhilosophyScreen() {
           <Text style={{ color: '#FFF', fontSize: 13, fontWeight: '700', marginTop: 8 }}>Ejercicios</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {/* Virtues card */}}
+          onPress={() => setSection('virtues')}
           style={{
             flex: 1,
             margin: 4,

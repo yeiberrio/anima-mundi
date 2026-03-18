@@ -10,9 +10,15 @@ export class ContentService {
     const existingVerses = await db.getFirstAsync<{ count: number }>(
       'SELECT COUNT(*) as count FROM bible_verses'
     );
-    if (existingVerses && existingVerses.count > 0) return;
+    console.log('[Seed] Bible verses count:', existingVerses?.count);
+    if (existingVerses && existingVerses.count > 0) {
+      console.log('[Seed] Database already seeded, skipping');
+      return;
+    }
+    console.log('[Seed] Starting database seed...');
 
     // Seed bible verses
+    console.log('[Seed] Seeding', bibleVerses.length, 'bible verses...');
     for (const verse of bibleVerses) {
       await db.runAsync(
         'INSERT INTO bible_verses (book, chapter, verse, text, tags, is_featured) VALUES (?, ?, ?, ?, ?, ?)',
@@ -20,13 +26,18 @@ export class ContentService {
       );
     }
 
+    console.log('[Seed] Bible verses done');
+
     // Seed stoic quotes
+    console.log('[Seed] Seeding', stoicQuotes.length, 'stoic quotes...');
     for (const quote of stoicQuotes) {
       await db.runAsync(
         'INSERT INTO stoic_quotes (author, work, book_chapter, text, theme, is_featured) VALUES (?, ?, ?, ?, ?, ?)',
         [quote.author, quote.work, quote.book_chapter, quote.text, quote.theme, quote.is_featured]
       );
     }
+
+    console.log('[Seed] Stoic quotes done');
 
     // Seed prayers
     const allPrayers = [
@@ -39,12 +50,41 @@ export class ContentService {
       ...(prayers.magnificat || []),
       ...(prayers.proteccion || []),
     ];
+    console.log('[Seed] Seeding', allPrayers.length, 'prayers...');
     for (const prayer of allPrayers) {
       await db.runAsync(
         'INSERT INTO prayers (name, category, text, sort_order) VALUES (?, ?, ?, ?)',
         [prayer.name, prayer.category, prayer.text, prayer.sort_order]
       );
     }
+    console.log('[Seed] All done!');
+  }
+
+  static async getVersesByBook(book: string): Promise<
+    Array<{ id: number; book: string; chapter: number; verse: number; text: string; tags: string }>
+  > {
+    const db = await getDatabase();
+    return db.getAllAsync(
+      'SELECT id, book, chapter, verse, text, tags FROM bible_verses WHERE book = ? ORDER BY chapter, verse',
+      [book]
+    );
+  }
+
+  static async getVersesByTag(tag: string): Promise<
+    Array<{ id: number; book: string; chapter: number; verse: number; text: string; tags: string }>
+  > {
+    const db = await getDatabase();
+    return db.getAllAsync(
+      'SELECT id, book, chapter, verse, text, tags FROM bible_verses WHERE tags LIKE ? ORDER BY book, chapter, verse',
+      [`%"${tag}"%`]
+    );
+  }
+
+  static async getAllBibleVerses(): Promise<
+    Array<{ id: number; book: string; chapter: number; verse: number; text: string; tags: string }>
+  > {
+    const db = await getDatabase();
+    return db.getAllAsync('SELECT id, book, chapter, verse, text, tags FROM bible_verses ORDER BY book, chapter, verse');
   }
 
   static async getDailyVerse(): Promise<{

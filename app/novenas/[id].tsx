@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../../src/theme/colors';
 import { useNovena } from '../../src/hooks/useNovena';
 import { NovenaProgressBar } from '../../src/components/NovenaProgressBar';
@@ -9,6 +10,7 @@ import { NovenaProgressBar } from '../../src/components/NovenaProgressBar';
 export default function NovenaDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { novena, progress, startNovena, completeDay } = useNovena(id);
   const [viewingDay, setViewingDay] = useState<number | null>(null);
 
@@ -48,7 +50,7 @@ export default function NovenaDetailScreen() {
         </ScrollView>
 
         {!isCompleted && (
-          <View style={{ padding: 16, backgroundColor: '#FFF', borderTopWidth: 1, borderTopColor: colors.border }}>
+          <View style={{ paddingHorizontal: 16, paddingTop: 12, paddingBottom: Math.max(insets.bottom, 12), backgroundColor: '#FFF', borderTopWidth: 1, borderTopColor: colors.border }}>
             <TouchableOpacity
               onPress={() => {
                 completeDay(viewingDay);

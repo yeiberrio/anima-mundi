@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../../src/theme/colors';
 import { useRosary, MysteryType } from '../../src/hooks/useRosary';
 import { RosaryCounter } from '../../src/components/RosaryCounter';
@@ -32,6 +33,7 @@ export default function RosaryGuideScreen() {
     changeMystery,
   } = useRosary();
 
+  const insets = useSafeAreaInsets();
   const [showMysteryPicker, setShowMysteryPicker] = useState(false);
 
   const handleComplete = () => {
@@ -152,7 +154,8 @@ export default function RosaryGuideScreen() {
         style={{
           flexDirection: 'row',
           paddingHorizontal: 16,
-          paddingVertical: 12,
+          paddingTop: 12,
+          paddingBottom: Math.max(insets.bottom, 12),
           backgroundColor: '#FFF',
           borderTopWidth: 1,
           borderTopColor: colors.border,
