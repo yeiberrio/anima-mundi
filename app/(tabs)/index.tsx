@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../src/theme/colors';
 import { getGreeting, getTodayMysteryType, formatDate } from '../../src/utils/dateHelpers';
-import { ContentService } from '../../src/services/ContentService';
+import { ContentProvider } from '../../src/services/ContentProvider';
 import { useProgressStore } from '../../src/store/progressStore';
 import { VerseCard } from '../../src/components/VerseCard';
 import { QuoteDisplay } from '../../src/components/QuoteDisplay';
@@ -33,8 +33,8 @@ export default function HomeScreen() {
   useEffect(() => {
     async function loadDaily() {
       const [verse, stoic] = await Promise.all([
-        ContentService.getDailyVerse(),
-        ContentService.getDailyStoicQuote(),
+        ContentProvider.getDailyVerse(),
+        ContentProvider.getDailyStoicQuote(),
       ]);
       setDailyVerse(verse);
       setDailyStoic(stoic);
@@ -169,7 +169,7 @@ export default function HomeScreen() {
           { label: 'Devocionario', icon: 'book-outline' as const, route: '/prayer' as const },
           { label: 'Novenas', icon: 'calendar-outline' as const, route: '/prayer' as const },
           { label: 'Biblia', icon: 'book' as const, route: '/scripture' as const },
-          { label: 'Torá', icon: 'leaf-outline' as const, route: '/scripture' as const },
+          { label: 'Filosofía', icon: 'library-outline' as const, route: '/philosophy' as const },
         ].map((item, idx) => (
           <TouchableOpacity
             key={idx}

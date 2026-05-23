@@ -4,7 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { usePreferencesStore } from '../src/store/userPreferencesStore';
 import { useProgressStore } from '../src/store/progressStore';
-import { ContentService } from '../src/services/ContentService';
+import { Platform } from 'react-native';
+import { ContentProvider } from '../src/services/ContentProvider';
 import { colors } from '../src/theme/colors';
 import "../global.css";
 
@@ -16,11 +17,16 @@ export default function RootLayout() {
   useEffect(() => {
     async function init() {
       try {
-        await ContentService.seedDatabase();
+        await ContentProvider.seedDatabase();
         await Promise.all([
           loadPreferences(),
           loadProgress(),
         ]);
+        // Programar notificaciones de recomendación de novenas (solo nativo)
+        if (Platform.OS !== 'web') {
+          const { NotificationService } = require('../src/services/NotificationService');
+          NotificationService.scheduleNovenaRecommendations().catch(() => {});
+        }
       } catch (e) {
         console.error('Error initializing app:', e);
       } finally {

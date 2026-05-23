@@ -1,6 +1,13 @@
 import { useState, useCallback, useEffect } from 'react';
+import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import novenasData from '../data/novenas.json';
+
+// Dynamic import to avoid expo-sqlite chain on web
+let NotificationService: any = null;
+if (Platform.OS !== 'web') {
+  NotificationService = require('../services/NotificationService').NotificationService;
+}
 
 interface NovenaProgress {
   novenaId: string;
@@ -50,6 +57,17 @@ export function useNovena(novenaId?: string) {
       setAllProgress(updated);
       if (id === novenaId) setProgress(newProgress);
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+      // Programar recordatorios automáticos para los 9 días (solo nativo)
+      const novenaData = novenasData.find((n) => n.id === id);
+      if (novenaData && NotificationService) {
+        try {
+          await NotificationService.scheduleNovenaReminder(novenaData.saint, 0, 9, 8, 0);
+          console.log(`[Novena] Recordatorios programados para ${novenaData.saint}`);
+        } catch (e) {
+          console.error('[Novena] Error programando recordatorios:', e);
+        }
+      }
     },
     [allProgress, novenaId]
   );
@@ -66,6 +84,13 @@ export function useNovena(novenaId?: string) {
       setAllProgress(updated);
       setProgress(updatedProgress);
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+      // Si se completó el día 9, cancelar recordatorios restantes
+      if (day === 9 && NotificationService) {
+        try {
+          await NotificationService.scheduleNovenaReminder('', 9, 0);
+        } catch {}
+      }
     },
     [novenaId, progress, allProgress]
   );
@@ -77,6 +102,13 @@ export function useNovena(novenaId?: string) {
       setAllProgress(updated);
       if (id === novenaId) setProgress(null);
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+      // Cancelar recordatorios al abandonar novena
+      if (NotificationService) {
+        try {
+          await NotificationService.scheduleNovenaReminder('', 9, 0);
+        } catch {}
+      }
     },
     [allProgress, novenaId]
   );

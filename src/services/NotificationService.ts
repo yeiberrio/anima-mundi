@@ -409,4 +409,49 @@ export class NotificationService {
     const names = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     return names[day] || '';
   }
+
+  // ─── Notificaciones de recomendación de novenas ───────────────
+
+  static async scheduleNovenaRecommendations(): Promise<void> {
+    const hasPermission = await this.requestPermissions();
+    if (!hasPermission) return;
+
+    // Importar recomendaciones
+    const { NOVENA_RECOMMENDATIONS } = require('../data/novena_recommendations');
+
+    // Cancelar recomendaciones anteriores
+    const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+    for (const notif of scheduled) {
+      if (notif.content.data?.type === 'novena_recommendation') {
+        await Notifications.cancelScheduledNotificationAsync(notif.identifier);
+      }
+    }
+
+    // Programar una notificación semanal para cada novena en su día recomendado
+    for (const rec of NOVENA_RECOMMENDATIONS) {
+      // Construir mensaje con historia breve
+      const shortHistory = rec.history.length > 150
+        ? rec.history.substring(0, 150).replace(/\s+\S*$/, '') + '...'
+        : rec.history;
+
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: `🕯️ Hoy es buen día para la novena a ${rec.saint}`,
+          body: `${rec.reason.substring(0, 120)}...\n\n${shortHistory}`,
+          data: {
+            type: 'novena_recommendation',
+            novenaId: rec.novenaId,
+            saint: rec.saint,
+          },
+          ...(Platform.OS === 'android' && { channelId: 'spiritual' }),
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
+          weekday: rec.recommendedDay === 0 ? 1 : rec.recommendedDay + 1, // expo usa 1=Dom, 2=Lun...7=Sab
+          hour: 7,
+          minute: 30,
+        },
+      });
+    }
+  }
 }

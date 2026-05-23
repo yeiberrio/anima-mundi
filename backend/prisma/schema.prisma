@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BibleVerse {
+  id         Int      @id @default(autoincrement())
+  book       String
+  chapter    Int
+  verse      Int
+  text       String
+  tags       String[]
+  isFeatured Boolean  @default(false) @map("is_featured")
+
+  @@index([book, chapter])
+  @@map("bible_verses")
+}
+
+model StoicQuote {
+  id          Int      @id @default(autoincrement())
+  author      String
+  work        String
+  bookChapter String   @map("book_chapter")
+  text        String
+  theme       String
+  isFeatured  Boolean  @default(false) @map("is_featured")
+
+  @@index([author])
+  @@index([theme])
+  @@map("stoic_quotes")
+}
+
+model Prayer {
+  id        Int    @id @default(autoincrement())
+  name      String
+  category  String
+  text      String
+  sortOrder Int    @default(0) @map("sort_order")
+
+  @@index([category])
+  @@map("prayers")
+}
+
+model Novena {
+  id          String @id
+  saint       String
+  feastDay    String @map("feast_day")
+  intention   String
+  description String
+  days        Json
+
+  @@map("novenas")
+}
+
+model NovenaRecommendation {
+  id             Int    @id @default(autoincrement())
+  novenaId       String @unique @map("novena_id")
+  saint          String
+  recommendedDay Int    @map("recommended_day")
+  dayName        String @map("day_name")
+  reason         String
+  history        String
+  miracles       String
+  feastDay       String @map("feast_day")
+  feastMonth     Int    @map("feast_month")
+  feastDayNum    Int    @map("feast_day_num")
+
+  @@map("novena_recommendations")
+}
+
+model MysterySet {
+  id        String @id
+  name      String
+  days      Int[]
+  dayNames  String[] @map("day_names")
+  mysteries Json
+
+  @@map("mystery_sets")
+}
+
+model TorahGlossary {
+  id            Int    @id @default(autoincrement())
+  term          String @unique
+  pronunciation String
+  meaning       String
+
+  @@map("torah_glossary")
+}

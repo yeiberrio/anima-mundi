@@ -8,14 +8,21 @@ import {
   Modal,
   Alert,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../src/theme/colors';
 import { usePreferencesStore } from '../../src/store/userPreferencesStore';
-import { useNotifications } from '../../src/hooks/useNotifications';
-import { NotificationService } from '../../src/services/NotificationService';
 import { ThemeKey } from '../../src/theme/themes';
 import type { NotificationPreferences } from '../../src/store/userPreferencesStore';
+
+// Dynamic imports to avoid expo-sqlite/expo-notifications on web
+let useNotifications: any = null;
+let NotificationService: any = null;
+if (Platform.OS !== 'web') {
+  useNotifications = require('../../src/hooks/useNotifications').useNotifications;
+  NotificationService = require('../../src/services/NotificationService').NotificationService;
+}
 
 // ─── Componente TimePicker simple ───────────────────────────────
 function SimpleTimePicker({
@@ -29,12 +36,21 @@ function SimpleTimePicker({
   onConfirm: (time: string) => void;
   onCancel: () => void;
 }) {
-  const parsed = NotificationService.parseTime(initialTime) || { hour: 8, minute: 0 };
+  const parseTime = (t: string) => {
+    if (NotificationService) return NotificationService.parseTime(t) || { hour: 8, minute: 0 };
+    const [h, m] = t.split(':').map(Number);
+    return { hour: h || 8, minute: m || 0 };
+  };
+  const formatTimeFn = (h: number, m: number) => {
+    if (NotificationService) return NotificationService.formatTime(h, m);
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+  };
+  const parsed = parseTime(initialTime);
   const [hour, setHour] = useState(parsed.hour);
   const [minute, setMinute] = useState(parsed.minute);
 
   useEffect(() => {
-    const p = NotificationService.parseTime(initialTime) || { hour: 8, minute: 0 };
+    const p = parseTime(initialTime);
     setHour(p.hour);
     setMinute(p.minute);
   }, [initialTime, visible]);
@@ -81,7 +97,7 @@ function SimpleTimePicker({
               <Text style={{ color: colors.textSoft, fontWeight: '600' }}>Cancelar</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => onConfirm(NotificationService.formatTime(hour, minute))}
+              onPress={() => onConfirm(formatTimeFn(hour, minute))}
               style={{ flex: 1, paddingVertical: 10, borderRadius: 8, backgroundColor: colors.primary, alignItems: 'center' }}
             >
               <Text style={{ color: '#FFF', fontWeight: '600' }}>Aceptar</Text>
@@ -324,8 +340,26 @@ function NotificationCategoryCard({
 }
 
 // ─── Pantalla principal de Settings ─────────────────────────────
+const isWeb = Platform.OS === 'web';
+
+// Stub for web where notifications don't exist
+const NOTIF_STUB = {
+  hasPermission: null,
+  scheduledCount: 0,
+  isScheduling: false,
+  presets: [],
+  requestPermission: () => {},
+  toggleCategory: () => {},
+  updateTimes: () => {},
+  updateDays: () => {},
+  applyPreset: () => {},
+  sendTestNotification: () => {},
+  rescheduleAll: () => {},
+};
+
 export default function SettingsScreen() {
   const { preferences, updatePreferences } = usePreferencesStore();
+  const notif = useNotifications ? useNotifications() : NOTIF_STUB;
   const {
     hasPermission,
     scheduledCount,
@@ -338,20 +372,20 @@ export default function SettingsScreen() {
     applyPreset,
     sendTestNotification,
     rescheduleAll,
-  } = useNotifications();
+  } = notif;
 
   const [activePreset, setActivePreset] = useState<string | null>(null);
 
   // Solicitar permisos al entrar si no los tiene
   useEffect(() => {
-    if (hasPermission === false) {
+    if (!isWeb && hasPermission === false) {
       requestPermission();
     }
   }, [hasPermission, requestPermission]);
 
   // Programar notificaciones al cargar
   useEffect(() => {
-    if (hasPermission) {
+    if (!isWeb && hasPermission) {
       rescheduleAll();
     }
   }, [hasPermission]); // Solo al obtener permisos, no en cada cambio

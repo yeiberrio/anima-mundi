@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../src/theme/colors';
-import { ContentService } from '../../src/services/ContentService';
+import { ContentProvider } from '../../src/services/ContentProvider';
 import { QuoteDisplay } from '../../src/components/QuoteDisplay';
 
 interface StoicQuote {
@@ -114,13 +114,13 @@ export default function PhilosophyScreen() {
   const [selectedExercise, setSelectedExercise] = useState<typeof exercises[0] | null>(null);
 
   useEffect(() => {
-    ContentService.getDailyStoicQuote().then((q) => {
+    ContentProvider.getDailyStoicQuote().then((q) => {
       if (q) setDailyQuote(q as unknown as StoicQuote);
     });
   }, []);
 
   const loadAuthor = async (author: string) => {
-    const data = await ContentService.getQuotesByAuthor(author);
+    const data = await ContentProvider.getQuotesByAuthor(author);
     setQuotes(data as StoicQuote[]);
     setSelectedAuthor(author);
     setSection('author');
