@@ -1,0 +1,170 @@
+{
+  "gozosos": {
+    "name": "Misterios Gozosos",
+    "days": [1, 6],
+    "dayNames": ["Lunes", "Sábado"],
+    "mysteries": [
+      {
+        "number": 1,
+        "title": "La Anunciación del Ángel a María",
+        "meditation": "El ángel Gabriel fue enviado por Dios a una ciudad de Galilea llamada Nazaret, a una virgen desposada con un hombre llamado José, de la casa de David; el nombre de la virgen era María.",
+        "fruit": "Humildad",
+        "reference": "Lucas 1:26-38"
+      },
+      {
+        "number": 2,
+        "title": "La Visitación de María a Santa Isabel",
+        "meditation": "María se levantó y fue deprisa a la montaña, a una ciudad de Judá. Entró en casa de Zacarías y saludó a Isabel. Cuando Isabel oyó el saludo de María, la criatura saltó en su seno.",
+        "fruit": "Caridad con el prójimo",
+        "reference": "Lucas 1:39-56"
+      },
+      {
+        "number": 3,
+        "title": "El Nacimiento de Jesús en Belén",
+        "meditation": "Estando allí, se le cumplieron los días del alumbramiento, y dio a luz a su hijo primogénito, lo envolvió en pañales y lo acostó en un pesebre, porque no tenían sitio en el mesón.",
+        "fruit": "Pobreza de espíritu, desprendimiento",
+        "reference": "Lucas 2:1-20"
+      },
+      {
+        "number": 4,
+        "title": "La Presentación del Niño Jesús en el Templo",
+        "meditation": "Cuando se cumplieron los días de la purificación, según la ley de Moisés, llevaron a Jesús a Jerusalén para presentarle al Señor.",
+        "fruit": "Obediencia y pureza",
+        "reference": "Lucas 2:22-40"
+      },
+      {
+        "number": 5,
+        "title": "El Niño Jesús Perdido y Hallado en el Templo",
+        "meditation": "Al cabo de tres días, lo encontraron en el templo, sentado en medio de los maestros, escuchándolos y haciéndoles preguntas.",
+        "fruit": "Búsqueda de Dios en todo",
+        "reference": "Lucas 2:41-52"
+      }
+    ]
+  },
+  "luminosos": {
+    "name": "Misterios Luminosos",
+    "days": [4],
+    "dayNames": ["Jueves"],
+    "mysteries": [
+      {
+        "number": 1,
+        "title": "El Bautismo de Jesús en el Jordán",
+        "meditation": "Bautizado Jesús, salió luego del agua; y en esto se abrieron los cielos, y vio al Espíritu de Dios que descendía en forma de paloma y venía sobre él.",
+        "fruit": "Apertura al Espíritu Santo",
+        "reference": "Mateo 3:13-17"
+      },
+      {
+        "number": 2,
+        "title": "Las Bodas de Caná",
+        "meditation": "La madre de Jesús le dijo: «No tienen vino.» Jesús le contestó: «Mujer, ¿qué nos va a ti y a mí? Todavía no ha llegado mi hora.» Su madre dijo a los sirvientes: «Haced lo que él os diga.»",
+        "fruit": "Fe en la intercesión de María",
+        "reference": "Juan 2:1-12"
+      },
+      {
+        "number": 3,
+        "title": "El Anuncio del Reino de Dios",
+        "meditation": "El tiempo se ha cumplido y el Reino de Dios está cerca; convertíos y creed en el Evangelio.",
+        "fruit": "Conversión",
+        "reference": "Marcos 1:14-15"
+      },
+      {
+        "number": 4,
+        "title": "La Transfiguración en el Monte Tabor",
+        "meditation": "Su rostro resplandeció como el sol, y sus vestidos se volvieron blancos como la luz. Y se les aparecieron Moisés y Elías conversando con él.",
+        "fruit": "Deseo de santidad",
+        "reference": "Mateo 17:1-8"
+      },
+      {
+        "number": 5,
+        "title": "La Institución de la Eucaristía",
+        "meditation": "Tomó luego pan, y habiendo dado gracias, lo partió y se lo dio diciendo: «Esto es mi cuerpo, que se entrega por vosotros; haced esto en conmemoración mía.»",
+        "fruit": "Adoración eucarística",
+        "reference": "Lucas 22:14-20"
+      }
+    ]
+  },
+  "dolorosos": {
+    "name": "Misterios Dolorosos",
+    "days": [2, 5],
+    "dayNames": ["Martes", "Viernes"],
+    "mysteries": [
+      {
+        "number": 1,
+        "title": "La Agonía de Jesús en el Huerto de Getsemaní",
+        "meditation": "Padre mío, si es posible, que pase de mí este cáliz; pero no sea como yo quiero, sino como quieres tú.",
+        "fruit": "Arrepentimiento de los pecados",
+        "reference": "Mateo 26:36-46"
+      },
+      {
+        "number": 2,
+        "title": "La Flagelación de Jesús en la Columna",
+        "meditation": "Pilato tomó entonces a Jesús y lo mandó azotar.",
+        "fruit": "Mortificación de los sentidos",
+        "reference": "Juan 19:1"
+      },
+      {
+        "number": 3,
+        "title": "La Coronación de Espinas",
+        "meditation": "Los soldados trenzaron una corona de espinas, se la pusieron en la cabeza y le vistieron un manto de púrpura.",
+        "fruit": "Desprecio del mundo",
+        "reference": "Juan 19:2-3"
+      },
+      {
+        "number": 4,
+        "title": "Jesús con la Cruz a Cuestas Camino al Calvario",
+        "meditation": "Cargando con su cruz, salió al sitio llamado de la Calavera, que en hebreo se dice Gólgota.",
+        "fruit": "Paciencia en las pruebas",
+        "reference": "Juan 19:17"
+      },
+      {
+        "number": 5,
+        "title": "La Crucifixión y Muerte de Nuestro Señor",
+        "meditation": "Padre, perdónalos, porque no saben lo que hacen. Padre, en tus manos encomiendo mi espíritu.",
+        "fruit": "Salvación de las almas",
+        "reference": "Lucas 23:33-46"
+      }
+    ]
+  },
+  "gloriosos": {
+    "name": "Misterios Gloriosos",
+    "days": [0, 3],
+    "dayNames": ["Domingo", "Miércoles"],
+    "mysteries": [
+      {
+        "number": 1,
+        "title": "La Resurrección de Jesús",
+        "meditation": "No está aquí, ha resucitado, como lo había dicho. Venid a ver el sitio donde yacía.",
+        "fruit": "Fe",
+        "reference": "Mateo 28:1-10"
+      },
+      {
+        "number": 2,
+        "title": "La Ascensión de Jesús al Cielo",
+        "meditation": "Dicho esto, lo vieron subir, hasta que una nube se lo quitó de la vista.",
+        "fruit": "Esperanza y deseo del cielo",
+        "reference": "Hechos 1:9-11"
+      },
+      {
+        "number": 3,
+        "title": "La Venida del Espíritu Santo en Pentecostés",
+        "meditation": "Se llenaron todos de Espíritu Santo y empezaron a hablar en otras lenguas, según el Espíritu les concedía expresarse.",
+        "fruit": "Dones del Espíritu Santo",
+        "reference": "Hechos 2:1-13"
+      },
+      {
+        "number": 4,
+        "title": "La Asunción de María al Cielo",
+        "meditation": "María fue asunta al cielo en cuerpo y alma, donde participa de la gloria de su Hijo resucitado.",
+        "fruit": "Gracia de una buena muerte",
+        "reference": "Tradición de la Iglesia"
+      },
+      {
+        "number": 5,
+        "title": "La Coronación de María como Reina del Cielo y la Tierra",
+        "meditation": "Una señal grandiosa apareció en el cielo: una mujer vestida del sol, con la luna bajo sus pies y una corona de doce estrellas sobre su cabeza.",
+        "fruit": "Devoción a María",
+        "reference": "Apocalipsis 12:1"
+      }
+    ]
+  }
+}

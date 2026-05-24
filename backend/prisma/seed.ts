@@ -5,7 +5,19 @@ import * as path from 'path';
 const prisma = new PrismaClient();
 
 function loadJson(filename: string) {
-  const filePath = path.join(__dirname, '..', '..', 'src', 'data', filename);
+  // The data files live in backend/prisma/data and are copied into the Docker
+  // image. Resolve against several candidate locations so this works both with
+  // ts-node (prisma/seed.ts) and the compiled build (dist/prisma/seed.js).
+  const candidates = [
+    path.join(process.cwd(), 'prisma', 'data', filename), // /app/prisma/data (container)
+    path.join(__dirname, '..', 'data', filename), // dist/prisma -> dist/data (if emitted)
+    path.join(__dirname, 'data', filename),
+    path.join(__dirname, '..', '..', 'prisma', 'data', filename),
+  ];
+  const filePath = candidates.find((p) => fs.existsSync(p));
+  if (!filePath) {
+    throw new Error(`Seed data file not found: ${filename}. Tried: ${candidates.join(', ')}`);
+  }
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 

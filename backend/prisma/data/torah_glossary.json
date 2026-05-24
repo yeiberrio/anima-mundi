@@ -1,0 +1,12 @@
+[
+  { "term": "Torah", "pronunciation": "to-RÁ", "meaning": "La Ley / los cinco libros de Moisés" },
+  { "term": "Mitzvah", "pronunciation": "mitz-VÁ", "meaning": "Mandamiento / buena acción" },
+  { "term": "Shabbat", "pronunciation": "sha-BÁT", "meaning": "El sábado / día de descanso" },
+  { "term": "Teshuvah", "pronunciation": "te-shu-VÁ", "meaning": "Arrepentimiento / retorno" },
+  { "term": "Chesed", "pronunciation": "JÉ-sed", "meaning": "Amor misericordioso / bondad" },
+  { "term": "Emet", "pronunciation": "É-met", "meaning": "Verdad" },
+  { "term": "Shalom", "pronunciation": "sha-LÓM", "meaning": "Paz / plenitud / totalidad" },
+  { "term": "Kadosh", "pronunciation": "ka-DÓSH", "meaning": "Santo / separado para Dios" },
+  { "term": "Adonai", "pronunciation": "a-do-NÁI", "meaning": "Señor (nombre de Dios)" },
+  { "term": "Elohim", "pronunciation": "e-lo-HÍM", "meaning": "Dios (nombre de poder)" }
+]
