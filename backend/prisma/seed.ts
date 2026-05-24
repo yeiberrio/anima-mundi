@@ -12,51 +12,61 @@ function loadJson(filename: string) {
 async function main() {
   console.log('Seeding database...');
 
-  // Bible verses
+  // Bible verses (only if table is empty — no unique key for skipDuplicates to dedupe on)
   const bibleVerses = loadJson('bible_verses.json');
-  await prisma.bibleVerse.createMany({
-    data: bibleVerses.map((v: any) => ({
-      book: v.book,
-      chapter: v.chapter,
-      verse: v.verse,
-      text: v.text,
-      tags: v.tags || [],
-      isFeatured: v.is_featured === 1,
-    })),
-    skipDuplicates: true,
-  });
-  console.log(`  Bible verses: ${bibleVerses.length}`);
-
-  // Stoic quotes
-  const stoicQuotes = loadJson('stoic_quotes.json');
-  await prisma.stoicQuote.createMany({
-    data: stoicQuotes.map((q: any) => ({
-      author: q.author,
-      work: q.work,
-      bookChapter: q.book_chapter,
-      text: q.text,
-      theme: q.theme,
-      isFeatured: q.is_featured === 1,
-    })),
-    skipDuplicates: true,
-  });
-  console.log(`  Stoic quotes: ${stoicQuotes.length}`);
-
-  // Prayers (flatten categories)
-  const prayersData = loadJson('prayers.json');
-  const prayers: any[] = [];
-  for (const [category, items] of Object.entries(prayersData)) {
-    for (const p of items as any[]) {
-      prayers.push({
-        name: p.name,
-        category,
-        text: p.text,
-        sortOrder: p.sort_order || 0,
-      });
-    }
+  if ((await prisma.bibleVerse.count()) === 0) {
+    await prisma.bibleVerse.createMany({
+      data: bibleVerses.map((v: any) => ({
+        book: v.book,
+        chapter: v.chapter,
+        verse: v.verse,
+        text: v.text,
+        tags: v.tags || [],
+        isFeatured: v.is_featured === 1,
+      })),
+    });
+    console.log(`  Bible verses: ${bibleVerses.length}`);
+  } else {
+    console.log('  Bible verses: already seeded, skipping');
   }
-  await prisma.prayer.createMany({ data: prayers, skipDuplicates: true });
-  console.log(`  Prayers: ${prayers.length}`);
+
+  // Stoic quotes (only if table is empty)
+  const stoicQuotes = loadJson('stoic_quotes.json');
+  if ((await prisma.stoicQuote.count()) === 0) {
+    await prisma.stoicQuote.createMany({
+      data: stoicQuotes.map((q: any) => ({
+        author: q.author,
+        work: q.work,
+        bookChapter: q.book_chapter,
+        text: q.text,
+        theme: q.theme,
+        isFeatured: q.is_featured === 1,
+      })),
+    });
+    console.log(`  Stoic quotes: ${stoicQuotes.length}`);
+  } else {
+    console.log('  Stoic quotes: already seeded, skipping');
+  }
+
+  // Prayers (flatten categories — only if table is empty)
+  const prayersData = loadJson('prayers.json');
+  if ((await prisma.prayer.count()) === 0) {
+    const prayers: any[] = [];
+    for (const [category, items] of Object.entries(prayersData)) {
+      for (const p of items as any[]) {
+        prayers.push({
+          name: p.name,
+          category,
+          text: p.text,
+          sortOrder: p.sort_order || 0,
+        });
+      }
+    }
+    await prisma.prayer.createMany({ data: prayers });
+    console.log(`  Prayers: ${prayers.length}`);
+  } else {
+    console.log('  Prayers: already seeded, skipping');
+  }
 
   // Novenas
   const novenas = loadJson('novenas.json');
