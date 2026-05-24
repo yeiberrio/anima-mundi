@@ -16,4 +16,7 @@ RUN npm run build
 ENV NODE_ENV=production
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma db push --skip-generate --accept-data-loss && npx prisma db seed && node dist/src/main"]
+# Start the HTTP server immediately so the healthcheck passes within its window;
+# create tables (db push) and load content (seed) in the background. The /health
+# endpoint returns static JSON and does not depend on the DB.
+CMD ["sh", "-c", "(npx prisma db push --skip-generate --accept-data-loss && npx prisma db seed) & node dist/src/main"]
